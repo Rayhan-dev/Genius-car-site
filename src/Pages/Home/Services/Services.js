@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardGroup } from "react-bootstrap";
-import Service from "../Home/Service/Service";
+import Service from "../Service/Service";
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -11,7 +11,7 @@ const Services = () => {
   }, []);
   return (
     <div>
-      <h1>this is services</h1>
+      <h1 className="text-center py-3 text-primary">Services We Provide</h1>
       <div className="row">
         <CardGroup>
             {services.map((service) => (
