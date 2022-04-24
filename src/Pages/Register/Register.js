@@ -1,12 +1,12 @@
 import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [createUserWithEmailAndPassword, user, loading, error] =
@@ -14,6 +14,7 @@ const Register = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    navigate('/');
   };
   const getEmail = (event) => {
     const email = event.target.value;
@@ -23,7 +24,7 @@ const Register = () => {
     const password = event.target.value;
     setPassword(password);
   };
-    
+
   let successMessegeElement;
   let errors;
   if (user) {

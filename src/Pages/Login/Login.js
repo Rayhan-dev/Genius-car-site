@@ -1,35 +1,78 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import auth from "../../firebase.init";
 
 const Login = () => {
-  const emailRef = useRef('');
-  const passRef = useRef('');
-
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const getEmail = (event) => {
+    const email = event.target.value;
+    setEmail(email);
+  };
+  const getPassword = (event) => {
+    const password = event.target.value;
+    setPassword(password);
+  };
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const email = emailRef.current.value;
-    const password = passRef.current.value;
-    console.log(email, password);
+    navigate('/')
   };
+  let successMessegeElement;
+  let errors;
+  if (user) {
+    successMessegeElement = (
+      <div>
+        <p className="my-2 text-success">Signed In User: {user.user.email}</p>
+      </div>
+    );
+  }
+  if (error) {
+    errors = (
+      <div>
+        <p className="text-danger"> Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="container my-5 w-50 ">
       <h1>Please Login</h1>
       <Form onSubmit={handleFormSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control ref={emailRef} type="email" placeholder="Enter email" />
+          <Form.Control
+            onBlur={getEmail}
+            type="email"
+            placeholder="Enter email"
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control ref={passRef} type="password" placeholder="Password" />
+          <Form.Control
+            onBlur={getPassword}
+            type="password"
+            placeholder="Password"
+          />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button
+          onClick={() => signInWithEmailAndPassword(email, password)}
+          variant="primary"
+          type="submit"
+        >
           Submit
         </Button>
       </Form>
+      {successMessegeElement}
+      {errors}
       <div className="my-3">
         <span>
           New to <b>Car Doctor</b>?
