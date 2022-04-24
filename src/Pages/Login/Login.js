@@ -20,11 +20,11 @@ const Login = () => {
     useSignInWithEmailAndPassword(auth);
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    navigate('/')
   };
   let successMessegeElement;
   let errors;
   if (user) {
+    navigate('/');
     successMessegeElement = (
       <div>
         <p className="my-2 text-success">Signed In User: {user.user.email}</p>

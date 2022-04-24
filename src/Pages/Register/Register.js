@@ -14,7 +14,7 @@ const Register = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    navigate('/');
+    
   };
   const getEmail = (event) => {
     const email = event.target.value;
@@ -28,6 +28,7 @@ const Register = () => {
   let successMessegeElement;
   let errors;
   if (user) {
+    navigate('/');
     successMessegeElement = (
       <div>
         <p className="my-2 text-success">Signed In User: {user.user.email}</p>
