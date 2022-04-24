@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -12,21 +14,35 @@ const Register = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const getEmail = event.target.email.value;
-    const getPassword = event.target.password.value;
-    setEmail(getEmail);
-    setPassword(getPassword);
-    console.log(user);
   };
+  const getEmail = (event) => {
+    const email = event.target.value;
+    setEmail(email);
+  };
+  const getPassword = (event) => {
+    const password = event.target.value;
+    setPassword(password);
+  };
+    
   let successMessegeElement;
+  let errors;
   if (user) {
     successMessegeElement = (
       <div>
-        <p>Signed In User: {user.email}</p>
+        <p className="my-2 text-success">Signed In User: {user.user.email}</p>
       </div>
     );
   }
-
+  if (error) {
+    errors = (
+      <div>
+        <p className="text-danger"> Error: {error.message}</p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="container my-5 w-50">
       <h1>Please Register</h1>
@@ -35,7 +51,12 @@ const Register = () => {
           <Form.Control type="text" placeholder="Your Name" />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control name="email" type="email" placeholder="Enter email" />
+          <Form.Control
+            onBlur={getEmail}
+            name="email"
+            type="email"
+            placeholder="Enter email"
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -43,6 +64,7 @@ const Register = () => {
             name="password"
             type="password"
             placeholder="Password"
+            onBlur={getPassword}
           />
         </Form.Group>
         <Button
@@ -52,8 +74,9 @@ const Register = () => {
         >
           Submit
         </Button>
-        {successMessegeElement};
       </Form>
+      {successMessegeElement}
+      {errors}
       <div className="my-3">
         <span>Already have an account?</span>
         <span className="mx-1">
